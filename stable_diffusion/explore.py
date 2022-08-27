@@ -1,7 +1,10 @@
 # FROM THE BLOG POST : https://huggingface.co/blog/stable_diffusion
 import os
+import click
+import logging
 
 from PIL import Image
+
 import torch
 from diffusers import StableDiffusionPipeline
 
@@ -9,18 +12,28 @@ from dotenv import load_dotenv
 load_dotenv()  # take environment variables from .env.
 
 from . import default
-YOUR_TOKEN = os.environ["HUGGING_FACE_TOKEN"]
+# Configure the logging
+from logging.config import dictConfig
 
-os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
-os.environ["CUDA_VISIBLE_DEVICES"] = default.CUDA_VISIBLE_DEVICE
+dictConfig(default.LOG_DICT_CONFIG)
+
+YOUR_TOKEN = os.environ["HUGGING_FACE_TOKEN"]
 
 
 # get your token at https://huggingface.co/settings/tokens
-pipe = StableDiffusionPipeline.from_pretrained("CompVis/stable-diffusion-v1-4", use_auth_token=YOUR_TOKEN)
+# pipe = StableDiffusionPipeline.from_pretrained("CompVis/stable-diffusion-v1-4", use_auth_token=YOUR_TOKEN)
 
 # Version float16
-# Seems to work only on cuda
+# Standard float16 seems to work only on cuda
 # pipe = StableDiffusionPipeline.from_pretrained("CompVis/stable-diffusion-v1-4", revision="fp16", torch_dtype=torch.float16, use_auth_token=YOUR_TOKEN)
+
+# Using bfloat16 seems to work on intel CPU
+# Or not ... 
+# File "/home/estrade/.pyenv/versions/stable_diffusion/lib/python3.10/site-packages/torch/nn/modules/linear.py", line 114, in forward
+#     return F.linear(input, self.weight, self.bias)
+# RuntimeError: expected scalar type BFloat16 but found Float
+
+pipe = StableDiffusionPipeline.from_pretrained("CompVis/stable-diffusion-v1-4", revision="fp16", torch_dtype=torch.bfloat16, use_auth_token=YOUR_TOKEN)
 
 print(pipe)
 
