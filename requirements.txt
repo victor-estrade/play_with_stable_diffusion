@@ -1,0 +1,16 @@
+
+click
+python-dotenv
+
+# data science
+numpy
+scipy
+
+# text utils
+ftfy
+
+# deep learning
+torch
+torchvision
+diffusers==0.2.4
+transformers
