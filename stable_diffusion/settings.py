@@ -9,7 +9,7 @@ from .utils import fetch_huggingface_key
 
 
 # Choose which GPU can be used
-CUDA_VISIBLE_DEVICE = ""
+CUDA_VISIBLE_DEVICE = "0"
 
 # The location of models downloaded by torch.hub
 # default is ~/.cache/torch/
