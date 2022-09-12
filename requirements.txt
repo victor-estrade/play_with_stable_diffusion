@@ -12,5 +12,8 @@ ftfy
 # deep learning
 torch
 torchvision
-diffusers==0.2.4
+diffusers
 transformers
+
+# Web app
+gradio

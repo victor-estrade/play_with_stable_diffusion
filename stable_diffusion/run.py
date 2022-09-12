@@ -4,52 +4,68 @@ import click
 import logging
 
 from PIL import Image
+import numpy as np
 
 import torch
 from diffusers import StableDiffusionPipeline
 
-from dotenv import load_dotenv
-load_dotenv()  # take environment variables from .env.
 
+from . import settings
 from . import default
-# Configure the logging
-from logging.config import dictConfig
-
-dictConfig(default.LOG_DICT_CONFIG)
+from .pipelines import StableDiffusionImg2ImgPipeline
 
 logger = logging.getLogger(__name__)
 
-HUGGING_FACE_TOKEN = os.environ["HUGGING_FACE_TOKEN"]
-
-os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
-os.environ["CUDA_VISIBLE_DEVICES"] = default.CUDA_VISIBLE_DEVICE
 
 
+def preprocess_init_image(image: Image):
+    w, h = image.size
+    w, h = map(lambda x: x - x % 32, (w, h))  # resize to integer multiple of 32
+    image = image.resize((w, h), resample=Image.Resampling.LANCZOS)
+    image = np.array(image).astype(np.float32) / 255.0
+    image = image[None].transpose(0, 3, 1, 2)
+    image = torch.from_numpy(image)
+    return 2.0 * image - 1.0
 
-def load_model(device="cuda", half_precision=True, auth_token=HUGGING_FACE_TOKEN):
+
+
+def preprocess_mask(mask: Image, width: int, height: int):
+    mask = mask.convert("L")
+    mask = mask.resize((width // 8, height // 8), resample=Image.Resampling.LANCZOS)
+    mask = np.array(mask).astype(np.float32) / 255.0
+    mask = np.tile(mask, (4, 1, 1))
+    mask = mask[None].transpose(0, 1, 2, 3)  # what does this step do?
+    mask = torch.from_numpy(mask)
+    return mask
+
+
+def load_model(device="cuda", half_precision=True, auth_token=settings.HUGGING_FACE_TOKEN, censor_nsfw=True):
     """Load the diffusion model
 
     :param device: (default="cuda") the device on which to put the model (example : "cpu", "cuda")
     :param half_precision: (default="fp16") the half_precision version of the model. 
         Use None to get the oriinaal Float32 model and "fp16" to load the Float16 version.
-    :param :
+    :param auth_token:
+    :param censor_nsfw:
 
     :return: pipe. The loaded model.
     """
     if half_precision:
-        pipe = StableDiffusionPipeline.from_pretrained(
+        pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
             "CompVis/stable-diffusion-v1-4",
             revision="fp16",
             torch_dtype=torch.float16,
             use_auth_token=auth_token
         )
     else:
-        pipe = StableDiffusionPipeline.from_pretrained(
+        pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
             "CompVis/stable-diffusion-v1-4",
             use_auth_token=auth_token
         )
     pipe = pipe.to(device)
+    pipe.censor_nsfw = censor_nsfw
     return pipe
+
 
 
 def generate(

@@ -2,26 +2,6 @@
 import logging
 from pathlib import Path
 
-
-CUDA_VISIBLE_DEVICE = ""
-
-# The dict used to configure logging
-LOG_DICT_CONFIG = dict(
-    version=1,
-    formatters={"f": {"format": "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"}},
-    handlers={
-        "h": {
-            "class": "logging.StreamHandler",
-            "formatter": "f",
-            "level": logging.DEBUG,
-        }
-    },
-    root={
-        "handlers": ["h"],
-        "level": logging.DEBUG,
-    },
-)
-
 THIS_FILE = Path(__file__)
 ROOT = THIS_FILE.parent.parent
 OUTPUT_DIR = ROOT / "output"
