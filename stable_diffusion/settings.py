@@ -9,7 +9,7 @@ from .utils import fetch_huggingface_key
 
 
 # Choose which GPU can be used
-CUDA_VISIBLE_DEVICE = "0"
+CUDA_VISIBLE_DEVICES = "0"
 
 # The location of models downloaded by torch.hub
 # default is ~/.cache/torch/
@@ -47,10 +47,11 @@ if "HUGGING_FACE_TOKEN" in os.environ:
 else:
     HUGGING_FACE_TOKEN = fetch_huggingface_key()
 
-if "CUDA_DEVICE_ORDER" not in os.environ:
-    os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
-if "CUDA_VISIBLE_DEVICES" not in os.environ:
-    os.environ["CUDA_VISIBLE_DEVICES"] = CUDA_VISIBLE_DEVICE
+if "COLAB_GPU" not in os.environ:  # Avoid using CUDA_VISIBLE_DEVICES on Colab notebooks
+    if "CUDA_DEVICE_ORDER" not in os.environ:
+        os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
+    if "CUDA_VISIBLE_DEVICES" not in os.environ:
+        os.environ["CUDA_VISIBLE_DEVICES"] = CUDA_VISIBLE_DEVICES
 
 torch_model_zoo_dir = Path(TORCH_MODEL_ZOO_DIR)
 if torch_model_zoo_dir.is_dir():
