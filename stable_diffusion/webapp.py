@@ -8,7 +8,9 @@ import numpy as np
 from .models import load_model
 from .generators import generate_from_prompt
 
+
 logger = logging.getLogger(__name__)
+
 
 PIPE = load_model(
     device="cuda",
@@ -17,9 +19,12 @@ PIPE = load_model(
     censor_nsfw=False,
     )
 
+
+
 def placeholder(prompt, num_image, width, height, *args, **kwargs):
     noise_image = np.random.rand(height, width, 3)
     return noise_image
+
 
 
 def generate_image(
