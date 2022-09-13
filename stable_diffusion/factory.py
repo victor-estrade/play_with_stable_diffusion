@@ -92,7 +92,7 @@ class Factory:
                 use_auth_token=auth_token)
         return tokenizer
 
-    def _make_vae(self, model_chekpoint, half_precision, auth_token):
+    def _make_unet(self, model_chekpoint, half_precision, auth_token):
         if half_precision:
             unet = UNet2DConditionModel.from_pretrained(
                 model_chekpoint,
