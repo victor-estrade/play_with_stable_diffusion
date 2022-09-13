@@ -77,7 +77,7 @@ class TextToImageBuilder():
             width = gr.Slider(minimum=64, maximum=1024, value=512, step=64, label="width")
             height = gr.Slider(minimum=64, maximum=1024, value=512, step=64, label="height")
         with gr.Row():
-            seed = gr.Number(0, label="seed : 0 = no seed")
+            seed = gr.Number(0, label="seed : 0 = no seed", precision=0)
             guidance_scale = gr.Number(7.5, label="guidance_scale")
         num_inference_steps = gr.Slider(minimum=5, maximum=200, value=50, step=5, label="num_inference_steps")
         num_images = gr.Slider(minimum=1, maximum=self.max_num_images, value=default.NUM_IMAGES, step=1, label="Number of images")
@@ -170,7 +170,7 @@ class ImageToImageBuilder():
         prompt = gr.Textbox(label="prompt")
         init_image = gr.Image(label="Initial image", type="pil")
         with gr.Row():
-            seed = gr.Number(0, label="seed : 0 = no seed")
+            seed = gr.Number(0, label="seed : 0 = no seed", precision=0)
             guidance_scale = gr.Number(7.5, label="guidance_scale")
         num_inference_steps = gr.Slider(minimum=5, maximum=200, value=50, step=5, label="num_inference_steps")
         strength = gr.Slider(minimum=0., maximum=1.0, value=0.8, step=0.05, label="prompt strength")
