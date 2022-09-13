@@ -50,8 +50,8 @@ class TextToImageGenerator():
                     )
                 for i in range(num_images)]
 
-        images = [image for result in results for image in result["sample"]]
-        nsfw_content_detected = [is_nsfw for result in results for is_nsfw in result["nsfw_content_detected"]]
+        images = [image for result in results for image in result.images]
+        nsfw_content_detected = [is_nsfw for result in results for is_nsfw in result.nsfw_content_detected]
         return images, nsfw_content_detected
 
 
@@ -111,6 +111,6 @@ class ImageToImageGenerator():
                     )
                 for i in range(num_images)]
 
-        images = [image for result in results for image in result["sample"]]
-        nsfw_content_detected = [is_nsfw for result in results for is_nsfw in result["nsfw_content_detected"]]
+        images = [image for result in results for image in result.images]
+        nsfw_content_detected = [is_nsfw for result in results for is_nsfw in result.nsfw_content_detected]
         return images, nsfw_content_detected
