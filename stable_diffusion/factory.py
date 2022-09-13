@@ -1,20 +1,16 @@
-from typing import List, Optional, Union, Tuple
-
+import typing as T
 import numpy as np
 import torch
 
-from PIL import Image
 from diffusers import (
     AutoencoderKL,
     DDIMScheduler,
-    DiffusionPipeline,
     PNDMScheduler,
     LMSDiscreteScheduler,
     UNet2DConditionModel,
 )
 from diffusers.pipelines.stable_diffusion import StableDiffusionPipeline, StableDiffusionImg2ImgPipeline, StableDiffusionInpaintPipeline
 from diffusers.pipelines.stable_diffusion import StableDiffusionSafetyChecker
-from tqdm.auto import tqdm
 from transformers import CLIPFeatureExtractor, CLIPTextModel, CLIPTokenizer
 
 
