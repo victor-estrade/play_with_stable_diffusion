@@ -46,7 +46,7 @@ class Factory:
         self.enable_attention_slicing = enable_attention_slicing
         self.vae = self._make_vae(model_checkpoint, half_precision, auth_token).to(device)
         self.text_encoder = self._make_text_encoder(model_checkpoint, half_precision, auth_token).to(device)
-        self.tokenizer = self._make_tokenizer(model_checkpoint, half_precision, auth_token).to(device)
+        self.tokenizer = self._make_tokenizer(model_checkpoint, half_precision, auth_token)
         self.unet = self._make_unet(model_checkpoint, half_precision, auth_token).to(device)
         self.scheduler = self._make_scheduler(model_checkpoint, half_precision, auth_token).to(device)
         self.safety_checker = self._make_safety_checker(model_checkpoint, half_precision, censored, auth_token).to(device)
