@@ -161,7 +161,7 @@ class Factory:
     # Factory Making pipelines
     # ================
 
-    def make_simple_pipeline(self):
+    def make_text_to_image_pipeline(self):
         pipe = StableDiffusionPipeline(
             self.vae,
             self.text_encoder,
