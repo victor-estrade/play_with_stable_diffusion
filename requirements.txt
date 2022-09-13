@@ -12,7 +12,7 @@ ftfy
 # deep learning
 torch
 torchvision
-diffusers
+diffusers=0.3
 transformers
 
 # Web app
