@@ -15,11 +15,12 @@ from .images import auto_glue_image_grid
 logger = logging.getLogger(__name__)
 
 FACTORY = Factory()
-SIMPLE_PIPELINE = FACTORY.make_simple()
+SIMPLE_PIPELINE = FACTORY.make_simple().to("cuda")
 
 
 MAX_NUM_IMAGES = 9
 IMAGES_PER_ROW = 3
+
 
 def generate_image(
     prompt,
