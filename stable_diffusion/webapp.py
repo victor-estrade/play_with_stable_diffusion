@@ -115,8 +115,11 @@ class TextToImageBuilder():
 
 
 @click.command()
-@click.option('--nsfw', is_flag=True, show_default=True, default=False, help="Remove image censoring. This is Not Safe For Work !")
-def main(nsfw):
+@click.option('--share', is_flag=True, show_default=True, default=False,
+    help="Share the app. Create a proxy in gradio's website to access the app.")
+@click.option('--nsfw', is_flag=True, show_default=True, default=False,
+help="Remove image censoring. This is Not Safe For Work !")
+def main(share, nsfw):
     """ Main function to run the gradio web app.
     """
 
@@ -131,7 +134,7 @@ def main(nsfw):
     with gr.Blocks() as demo:
         with gr.Tab("Text to image pipeline") :
             TEXT_TO_IMAGE_APP_BUILDER.build()
-    demo.launch()
+    demo.launch(share=share)
 
 if __name__ == "__main__":
     main()
