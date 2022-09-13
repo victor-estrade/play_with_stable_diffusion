@@ -64,8 +64,6 @@ class ImageToImageGenerator():
         self,
         prompt:str,
         init_image : Image,
-        width:int=512,
-        height:int=512,
         num_images=4,
         num_inference_steps=50,
         strength:float=1.0,
@@ -78,10 +76,6 @@ class ImageToImageGenerator():
             the sentence prompt to generate the images
         :param init_image:
             the initial image
-        :param width:
-            the width of the images
-        :param height:
-            the height of the images
         :param num_images:
             the number of images to degenerate from the prompt
         :param num_inference_steps:
@@ -110,8 +104,6 @@ class ImageToImageGenerator():
                 self.pipe(
                     prompt=prompt,
                     init_image=init_image,
-                    width=width,
-                    height=height,
                     num_inference_steps=num_inference_steps,
                     strength=strength,
                     guidance_scale=guidance_scale,

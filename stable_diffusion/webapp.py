@@ -142,8 +142,6 @@ class ImageToImageBuilder():
         prompt,
         init_image,
         num_image,
-        width,
-        height,
         seed,
         guidance_scale,
         num_inference_steps,
@@ -155,8 +153,6 @@ class ImageToImageBuilder():
         images, nsfw_content_detected = self.text_to_image_generator(
             prompt=prompt,
             init_image=init_image,
-            width=width,
-            height=height,
             num_images=num_image,
             num_inference_steps=num_inference_steps,
             strength=strength,
@@ -174,9 +170,6 @@ class ImageToImageBuilder():
         prompt = gr.Textbox(label="prompt")
         init_image = gr.Image(label="Initial image")
         with gr.Row():
-            width = gr.Slider(minimum=64, maximum=1024, value=512, step=64, label="width")
-            height = gr.Slider(minimum=64, maximum=1024, value=512, step=64, label="height")
-        with gr.Row():
             seed = gr.Number(0, label="seed : 0 = no seed")
             guidance_scale = gr.Number(7.5, label="guidance_scale")
         num_inference_steps = gr.Slider(minimum=5, maximum=200, value=50, step=5, label="num_inference_steps")
@@ -185,7 +178,6 @@ class ImageToImageBuilder():
 
         inputs = [
             prompt, init_image, num_images,
-            width, height,
             seed,
             guidance_scale,
             num_inference_steps,
