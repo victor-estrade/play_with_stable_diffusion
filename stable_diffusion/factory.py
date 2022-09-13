@@ -19,6 +19,7 @@ from transformers import CLIPFeatureExtractor, CLIPTextModel, CLIPTokenizer
 
 
 from . import settings
+from .utils import PIL_IMAGE_RESAMPLING
 
 
 class Factory:
@@ -81,6 +82,7 @@ class Factory:
         else:
             text_encoder = CLIPTextModel.from_pretrained(
                 model_chekpoint,
+                subfolder="text_encoder",
                 use_auth_token=auth_token)
         return text_encoder
 
@@ -95,6 +97,7 @@ class Factory:
         else:
             tokenizer = CLIPTokenizer.from_pretrained(
                 model_chekpoint,
+                subfolder="tokenizer",
                 use_auth_token=auth_token)
         return tokenizer
 
@@ -109,22 +112,12 @@ class Factory:
         else:
             unet = UNet2DConditionModel.from_pretrained(
                 model_chekpoint,
+                subfolder="unet",
                 use_auth_token=auth_token)
         return unet
 
     def _make_scheduler(self, model_chekpoint, half_precision, auth_token):
-        if half_precision:
-            scheduler = DDIMScheduler.from_pretrained(
-                model_chekpoint,
-                subfolder="scheduler",
-                revision="fp16",
-                torch_dtype=torch.float16,
-                use_auth_token=auth_token)
-        else:
-            scheduler = DDIMScheduler.from_pretrained(
-                model_chekpoint,
-                subfolder="scheduler",
-                use_auth_token=auth_token)
+        scheduler = PNDMScheduler(beta_start=0.00085, beta_end=0.012, beta_schedule="scaled_linear", num_train_timesteps=1000)
         return scheduler
 
     def _make_safety_checker(self, model_chekpoint, half_precision, auth_token):
@@ -143,18 +136,25 @@ class Factory:
         return safety_checker
 
     def _make_feature_extractor(self, model_chekpoint, half_precision, auth_token):
-        if half_precision:
-            feature_extractor = CLIPFeatureExtractor.from_pretrained(
-                model_chekpoint,
-                subfolder="feature_extractor",
-                revision="fp16",
-                torch_dtype=torch.float16,
-                use_auth_token=auth_token)
-        else:
-            feature_extractor = CLIPFeatureExtractor.from_pretrained(
-                model_chekpoint,
-                subfolder="feature_extractor",
-                use_auth_token=auth_token)
+        feature_extractor = CLIPFeatureExtractor(
+            crop_size = 224,
+            do_center_crop = True,
+            do_convert_rgb = True,
+            do_normalize = True,
+            do_resize = True,
+            image_mean = [
+                0.48145466,
+                0.4578275,
+                0.40821073
+            ],
+            image_std = [
+                0.26862954,
+                0.26130258,
+                0.27577711
+            ],
+            resample = PIL_IMAGE_RESAMPLING.BICUBIC,
+            size = 224            
+        )
         return feature_extractor
     
     # ================
