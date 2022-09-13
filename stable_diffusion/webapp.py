@@ -168,7 +168,7 @@ class ImageToImageBuilder():
 
     def build(self):
         prompt = gr.Textbox(label="prompt")
-        init_image = gr.Image(label="Initial image")
+        init_image = gr.Image(label="Initial image", type="pil")
         with gr.Row():
             seed = gr.Number(0, label="seed : 0 = no seed")
             guidance_scale = gr.Number(7.5, label="guidance_scale")
