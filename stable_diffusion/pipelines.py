@@ -268,3 +268,13 @@ class StableDiffusionImg2ImgPipelineOld(DiffusionPipeline):
             text_embeddings = torch.cat([uncond_embeddings, text_embeddings])
 
         return text_embeddings
+
+
+class UncensoredSafetyChecker():
+    def __init__(self, original_safety_checker):
+        self.original_safety_checker = original_safety_checker
+    
+    def __call__(self,  clip_input, images):
+        original_images = images.copy()
+        images, has_nsfw_concepts = self.original_safety_checker(clip_input, images)
+        return original_images, has_nsfw_concepts
