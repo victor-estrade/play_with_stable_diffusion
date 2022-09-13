@@ -207,9 +207,11 @@ class ImageToImageBuilder():
 @click.command()
 @click.option('--share', is_flag=True, show_default=True, default=False,
     help="Share the app. Create a proxy in gradio's website to access the app.")
+@click.option('--faster', is_flag=True, show_default=True, default=False,
+    help="Deactivate 'enable_attention_slicing' which helps save memory at the cost of small execution time.")
 @click.option('--nsfw', is_flag=True, show_default=True, default=False,
-help="Remove image censoring. This is Not Safe For Work !")
-def main(share, nsfw):
+    help="Remove image censoring. This is Not Safe For Work !")
+def main(share, faster, nsfw):
     """ Main function to run the gradio web app.
     """
 
@@ -218,7 +220,7 @@ def main(share, nsfw):
     DEVICE = "cuda"
 
     logger.info("Loading the models ...")
-    FACTORY = Factory(censored=not nsfw, device=DEVICE)
+    FACTORY = Factory(enable_attention_slicing=not faster, device=DEVICE, censored=not nsfw)
     TEXT_TO_IMAGE_APP_BUILDER = TextToImageBuilder.from_factory(
         FACTORY,
         max_num_images=MAX_NUM_IMAGES,

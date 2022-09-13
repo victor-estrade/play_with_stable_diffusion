@@ -171,6 +171,8 @@ class Factory:
             self.safety_checker,
             self.feature_extractor
         )
+        if self.enable_attention_slicing:
+            pipe.enable_attention_slicing()
         return pipe
 
     def make_image_to_image_pipeline(self):
@@ -183,6 +185,8 @@ class Factory:
             self.safety_checker,
             self.feature_extractor
         )
+        if self.enable_attention_slicing:
+            pipe.enable_attention_slicing()
         return pipe
 
     def make_inpaint_pipeline(self):
