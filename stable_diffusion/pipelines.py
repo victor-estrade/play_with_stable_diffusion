@@ -278,3 +278,6 @@ class UncensoredSafetyChecker():
         original_images = images.copy()
         images, has_nsfw_concepts = self.original_safety_checker(clip_input=clip_input, images=images)
         return original_images, has_nsfw_concepts
+    
+    def to(self, device):
+        self.original_safety_checker.to(device)
