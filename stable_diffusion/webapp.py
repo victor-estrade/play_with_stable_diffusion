@@ -37,8 +37,7 @@ class TextToImageBuilder():
         ):
         """ Alternative constructor using a Factory
         """
-        generator = factory.make_text_to_image_pipeline(
-            TextToImageGenerator(factory.make_text_to_image_pipeline().to(device)))
+        generator = TextToImageGenerator(factory.make_text_to_image_pipeline().to(device))
         new_builder = cls(generator, max_num_images=max_num_images, images_per_row=images_per_row)
         return new_builder
 
