@@ -1,4 +1,5 @@
 import logging
+import click
 
 from . import settings
 from . import default
@@ -7,56 +8,58 @@ import gradio as gr
 
 import numpy as np
 
-from .generators import generate_from_prompt
+from .generators import generate_from_prompt, TextToImageGenerator
 from .factory import Factory
 from .images import auto_glue_image_grid
 
 
 logger = logging.getLogger(__name__)
 
-FACTORY = Factory()
-SIMPLE_PIPELINE = FACTORY.make_simple().to("cuda")
 
 
-MAX_NUM_IMAGES = 9
-IMAGES_PER_ROW = 3
-
-
-def generate_image(
-    prompt,
-    num_image,
-    width,
-    height,
-    seed,
-    guidance_scale,
-    num_inference_steps,
-    prompt_strength,
-    ):
-    """ Generate the image
-    """
-    images, nsfw_content_detected = generate_from_prompt(
-        SIMPLE_PIPELINE,
-        prompt=prompt,
-        width=width,
-        height=height,
-        num_images=num_image,
-        num_inference_steps=num_inference_steps,
-        prompt_strength=prompt_strength,
-        guidance_scale=guidance_scale,
-        seed=seed,
-    )
-    print(nsfw_content_detected)
-
-    images_out = [auto_glue_image_grid(images)] + images + [None] * (MAX_NUM_IMAGES - len(images))
-
-    return images_out
-
-
-
-
-def main():
+@click.command()
+@click.option('--nsfw', is_flag=True, show_default=True, default=False, help="Remove image censoring. This is Not Safe For Work !")
+def main(nsfw):
     """ Main function to run the gradio web app.
     """
+
+    logger.info("Loading the models ...")
+    FACTORY = Factory(censored=not nsfw)
+    GENERATOR = TextToImageGenerator(FACTORY.make_simple().to("cuda"))
+    logger.info("Models are ready")
+
+    MAX_NUM_IMAGES = 9
+    IMAGES_PER_ROW = 3
+
+
+    def generate_images(
+        prompt,
+        num_image,
+        width,
+        height,
+        seed,
+        guidance_scale,
+        num_inference_steps,
+        prompt_strength,
+        ):
+        """ Wrapper around the generator.
+        """
+        images, nsfw_content_detected = GENERATOR(
+            prompt=prompt,
+            width=width,
+            height=height,
+            num_images=num_image,
+            num_inference_steps=num_inference_steps,
+            prompt_strength=prompt_strength,
+            guidance_scale=guidance_scale,
+            seed=seed,
+        )
+        print(nsfw_content_detected)
+
+        images_out = [auto_glue_image_grid(images)] + images + [None] * (MAX_NUM_IMAGES - len(images))
+
+        return images_out
+
     with gr.Blocks() as demo:
         prompt = gr.Textbox(label="prompt")
         with gr.Row():
@@ -93,7 +96,7 @@ def main():
                         output_images.append(out_img)
                         i += 1
         outputs = [out_glued_image] + output_images
-        greet_btn.click(fn=generate_image, inputs=inputs, outputs=outputs)
+        greet_btn.click(fn=generate_images, inputs=inputs, outputs=outputs)
     demo.launch()
 
 if __name__ == "__main__":

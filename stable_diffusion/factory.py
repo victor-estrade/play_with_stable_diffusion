@@ -162,7 +162,7 @@ class Factory:
     # Factory Making pipelines
     # ================
 
-    def make_simple(self):
+    def make_simple_pipeline(self):
         pipe = StableDiffusionPipeline(
             self.vae,
             self.text_encoder,
@@ -174,7 +174,7 @@ class Factory:
         )
         return pipe
 
-    def make_image_to_image(self):
+    def make_image_to_image_pipeline(self):
         pipe = StableDiffusionImg2ImgPipeline(
             self.vae,
             self.text_encoder,
@@ -186,7 +186,7 @@ class Factory:
         )
         return pipe
 
-    def make_inpaint(self):
+    def make_inpaint_pipeline(self):
         pipe = StableDiffusionInpaintPipeline(
             self.vae,
             self.text_encoder,
