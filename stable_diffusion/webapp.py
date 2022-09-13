@@ -17,6 +17,48 @@ logger = logging.getLogger(__name__)
 
 
 
+
+def make_text_to_image_pipeline(fn, max_num_images, images_per_row):
+    prompt = gr.Textbox(label="prompt")
+    with gr.Row():
+        width = gr.Slider(minimum=64, maximum=1024, value=512, step=64, label="width")
+        height = gr.Slider(minimum=64, maximum=1024, value=512, step=64, label="height")
+    with gr.Row():
+        seed = gr.Number(0, label="seed : 0 = no seed")
+        guidance_scale = gr.Number(7.5, label="guidance_scale")
+    num_inference_steps = gr.Slider(minimum=5, maximum=200, value=50, step=5, label="num_inference_steps")
+    prompt_strength = gr.Slider(minimum=0., maximum=1.0, value=1.0, step=0.05, label="prompt_strength")
+    num_images = gr.Slider(minimum=1, maximum=max_num_images, value=default.NUM_IMAGES, step=1, label="Number of images")
+
+    inputs = [
+        prompt, num_images,
+        width, height,
+        seed,
+        guidance_scale,
+        num_inference_steps,
+        prompt_strength,
+        ]
+    
+    greet_btn = gr.Button("Generate !")
+
+    out_glued_image = gr.Image(label=f"Generated images")
+
+    with gr.Accordion("Generated individual images"):
+        i = 0
+        output_images = []
+        while i < max_num_images:
+            with gr.Row():
+                remaining_out_images_to_init = max_num_images - i
+                for j in range(min(images_per_row, remaining_out_images_to_init)):
+                    out_img = gr.Image(label=f"Generated {i+1}")
+                    output_images.append(out_img)
+                    i += 1
+    outputs = [out_glued_image] + output_images
+    greet_btn.click(fn=fn, inputs=inputs, outputs=outputs)
+
+
+
+
 @click.command()
 @click.option('--nsfw', is_flag=True, show_default=True, default=False, help="Remove image censoring. This is Not Safe For Work !")
 def main(nsfw):
@@ -61,42 +103,8 @@ def main(nsfw):
         return images_out
 
     with gr.Blocks() as demo:
-        prompt = gr.Textbox(label="prompt")
-        with gr.Row():
-            width = gr.Slider(minimum=64, maximum=1024, value=512, step=64, label="width")
-            height = gr.Slider(minimum=64, maximum=1024, value=512, step=64, label="height")
-        with gr.Row():
-            seed = gr.Number(0, label="seed : 0 = no seed")
-            guidance_scale = gr.Number(7.5, label="guidance_scale")
-        num_inference_steps = gr.Slider(minimum=5, maximum=200, value=50, step=5, label="num_inference_steps")
-        prompt_strength = gr.Slider(minimum=0., maximum=1.0, value=1.0, step=0.05, label="prompt_strength")
-        num_images = gr.Slider(minimum=1, maximum=MAX_NUM_IMAGES, value=default.NUM_IMAGES, step=1, label="Number of images")
-
-        inputs = [
-            prompt, num_images,
-            width, height,
-            seed,
-            guidance_scale,
-            num_inference_steps,
-            prompt_strength,
-            ]
-        
-        greet_btn = gr.Button("Generate !")
-
-        out_glued_image = gr.Image(label=f"Generated images")
-
-        with gr.Accordion("Generated individual images"):
-            i = 0
-            output_images = []
-            while i < MAX_NUM_IMAGES:
-                with gr.Row():
-                    remaining_out_images_to_init = MAX_NUM_IMAGES - i
-                    for j in range(min(IMAGES_PER_ROW, remaining_out_images_to_init)):
-                        out_img = gr.Image(label=f"Generated {i+1}")
-                        output_images.append(out_img)
-                        i += 1
-        outputs = [out_glued_image] + output_images
-        greet_btn.click(fn=generate_images, inputs=inputs, outputs=outputs)
+        with gr.Tab("Text to image pipeline") :
+            make_text_to_image_pipeline(generate_images, MAX_NUM_IMAGES, IMAGES_PER_ROW)
     demo.launch()
 
 if __name__ == "__main__":
