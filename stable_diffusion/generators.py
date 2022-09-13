@@ -44,8 +44,6 @@ class TextToImageGenerator():
                     prompt=prompt,
                     width=width,
                     height=height,
-                    mask=None,
-                    init_image=None,
                     num_inference_steps=num_inference_steps,
                     guidance_scale=guidance_scale,
                     generator=generator
@@ -114,8 +112,6 @@ class ImageToImageGenerator():
                     init_image=init_image,
                     width=width,
                     height=height,
-                    mask=None,
-                    init_image=None,
                     num_inference_steps=num_inference_steps,
                     strength=strength,
                     guidance_scale=guidance_scale,
