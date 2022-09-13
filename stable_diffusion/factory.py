@@ -16,6 +16,7 @@ from transformers import CLIPFeatureExtractor, CLIPTextModel, CLIPTokenizer
 
 from . import settings
 from .utils import PIL_IMAGE_RESAMPLING
+from .pipelines import UncensoredSafetyChecker
 
 
 class Factory:
@@ -25,6 +26,7 @@ class Factory:
         half_precision=True,
         enable_attention_slicing=False,
         auth_token=settings.HUGGING_FACE_TOKEN,
+        censored=True,
         ):
         """ Factory of pipelines
 
@@ -38,6 +40,7 @@ class Factory:
 
         """
         self.model_checkpoint = model_checkpoint
+        self.censored = censored
         self.device = device
         self.half_precision = half_precision
         self.enable_attention_slicing = enable_attention_slicing
@@ -46,7 +49,7 @@ class Factory:
         self.tokenizer = self._make_tokenizer(model_checkpoint, half_precision, auth_token)
         self.unet = self._make_unet(model_checkpoint, half_precision, auth_token)
         self.scheduler = self._make_scheduler(model_checkpoint, half_precision, auth_token)
-        self.safety_checker = self._make_safety_checker(model_checkpoint, half_precision, auth_token)
+        self.safety_checker = self._make_safety_checker(model_checkpoint, half_precision, censored, auth_token)
         self.feature_extractor = self._make_feature_extractor(model_checkpoint, half_precision, auth_token)
 
     # ================
@@ -116,7 +119,7 @@ class Factory:
         scheduler = PNDMScheduler(beta_start=0.00085, beta_end=0.012, beta_schedule="scaled_linear", num_train_timesteps=1000)
         return scheduler
 
-    def _make_safety_checker(self, model_checkpoint, half_precision, auth_token):
+    def _make_safety_checker(self, model_checkpoint, half_precision, censored, auth_token):
         if half_precision:
             safety_checker = StableDiffusionSafetyChecker.from_pretrained(
                 model_checkpoint,
@@ -129,6 +132,8 @@ class Factory:
                 model_checkpoint,
                 subfolder="safety_checker",
                 use_auth_token=auth_token)
+        if not censored:
+            safety_checker = UncensoredSafetyChecker(safety_checker)
         return safety_checker
 
     def _make_feature_extractor(self, model_checkpoint, half_precision, auth_token):
