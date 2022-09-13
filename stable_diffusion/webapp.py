@@ -73,7 +73,7 @@ class TextToImageBuilder():
         return images_out
 
 
-    def build(self, max_num_images, images_per_row):
+    def build(self):
         prompt = gr.Textbox(label="prompt")
         with gr.Row():
             width = gr.Slider(minimum=64, maximum=1024, value=512, step=64, label="width")
@@ -83,7 +83,7 @@ class TextToImageBuilder():
             guidance_scale = gr.Number(7.5, label="guidance_scale")
         num_inference_steps = gr.Slider(minimum=5, maximum=200, value=50, step=5, label="num_inference_steps")
         prompt_strength = gr.Slider(minimum=0., maximum=1.0, value=1.0, step=0.05, label="prompt_strength")
-        num_images = gr.Slider(minimum=1, maximum=max_num_images, value=default.NUM_IMAGES, step=1, label="Number of images")
+        num_images = gr.Slider(minimum=1, maximum=self.max_num_images, value=default.NUM_IMAGES, step=1, label="Number of images")
 
         inputs = [
             prompt, num_images,
@@ -101,10 +101,10 @@ class TextToImageBuilder():
         with gr.Accordion("Generated individual images"):
             i = 0
             output_images = []
-            while i < max_num_images:
+            while i < self.max_num_images:
                 with gr.Row():
-                    remaining_out_images_to_init = max_num_images - i
-                    for j in range(min(images_per_row, remaining_out_images_to_init)):
+                    remaining_out_images_to_init = self.max_num_images - i
+                    for j in range(min(self.images_per_row, remaining_out_images_to_init)):
                         out_img = gr.Image(label=f"Generated {i+1}")
                         output_images.append(out_img)
                         i += 1
