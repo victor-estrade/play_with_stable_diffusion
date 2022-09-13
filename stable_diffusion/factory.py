@@ -50,7 +50,7 @@ class Factory:
         self.unet = self._make_unet(model_checkpoint, half_precision, auth_token).to(device)
         self.scheduler = self._make_scheduler(model_checkpoint, half_precision, auth_token)
         self.safety_checker = self._make_safety_checker(model_checkpoint, half_precision, censored, auth_token).to(device)
-        self.feature_extractor = self._make_feature_extractor(model_checkpoint, half_precision, auth_token).to(device)
+        self.feature_extractor = self._make_feature_extractor(model_checkpoint, half_precision, auth_token)
 
     # ================
     # Inner factory to load the models
