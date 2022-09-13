@@ -37,7 +37,7 @@ class TextToImageBuilder():
         ):
         """ Alternative constructor using a Factory
         """
-        generator = TextToImageGenerator(factory.make_text_to_image_pipeline().to(device))
+        generator = TextToImageGenerator(factory.make_text_to_image_pipeline())
         new_builder = cls(generator, max_num_images=max_num_images, images_per_row=images_per_row)
         return new_builder
 
@@ -132,7 +132,7 @@ class ImageToImageBuilder():
         ):
         """ Alternative constructor using a Factory
         """
-        generator = ImageToImageGenerator(factory.make_image_to_image_pipeline().to(device))
+        generator = ImageToImageGenerator(factory.make_image_to_image_pipeline())
         new_builder = cls(generator, max_num_images=max_num_images, images_per_row=images_per_row)
         return new_builder
 
@@ -215,9 +215,10 @@ def main(share, nsfw):
 
     MAX_NUM_IMAGES = 9
     IMAGES_PER_ROW = 3
+    DEVICE = "cuda"
 
     logger.info("Loading the models ...")
-    FACTORY = Factory(censored=not nsfw)
+    FACTORY = Factory(censored=not nsfw, device=DEVICE)
     TEXT_TO_IMAGE_APP_BUILDER = TextToImageBuilder.from_factory(
         FACTORY,
         max_num_images=MAX_NUM_IMAGES,
