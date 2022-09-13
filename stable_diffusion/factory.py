@@ -25,7 +25,7 @@ from .utils import PIL_IMAGE_RESAMPLING
 class Factory:
     def __init__(self, 
         model_checkpoint="CompVis/stable-diffusion-v1-4", 
-        device="cuda",
+        device="cuda",  # Unused for now
         half_precision=True,
         enable_attention_slicing=False,
         auth_token=settings.HUGGING_FACE_TOKEN,
