@@ -271,8 +271,8 @@ class StableDiffusionImg2ImgPipelineOld(DiffusionPipeline):
 
 
 class UncensoredSafetyChecker(StableDiffusionSafetyChecker):
-    def __init__(self, original_safety_checker):
-        self.original_safety_checker = original_safety_checker
+    # def __init__(self, original_safety_checker):
+    #     self.original_safety_checker = original_safety_checker
     
     # def __call__(self,  clip_input, images):
     #     original_images = images.copy()

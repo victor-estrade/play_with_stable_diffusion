@@ -120,20 +120,21 @@ class Factory:
         return scheduler
 
     def _make_safety_checker(self, model_checkpoint, half_precision, censored, auth_token):
+        safety_class = StableDiffusionSafetyChecker if censored else UncensoredSafetyChecker
         if half_precision:
-            safety_checker = StableDiffusionSafetyChecker.from_pretrained(
+            safety_checker = safety_class.from_pretrained(
                 model_checkpoint,
                 subfolder="safety_checker",
                 revision="fp16",
                 torch_dtype=torch.float16,
                 use_auth_token=auth_token)
         else:
-            safety_checker = StableDiffusionSafetyChecker.from_pretrained(
+            safety_checker = safety_class.from_pretrained(
                 model_checkpoint,
                 subfolder="safety_checker",
                 use_auth_token=auth_token)
-        if not censored:
-            safety_checker = UncensoredSafetyChecker(safety_checker)
+        # if not censored:
+        #     safety_checker = UncensoredSafetyChecker(safety_checker)
         return safety_checker
 
     def _make_feature_extractor(self, model_checkpoint, half_precision, auth_token):
