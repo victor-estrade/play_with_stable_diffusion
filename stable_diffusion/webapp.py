@@ -25,7 +25,7 @@ def main(nsfw):
 
     logger.info("Loading the models ...")
     FACTORY = Factory(censored=not nsfw)
-    GENERATOR = TextToImageGenerator(FACTORY.make_simple().to("cuda"))
+    GENERATOR = TextToImageGenerator(FACTORY.make_simple_pipeline().to("cuda"))
     logger.info("Models are ready")
 
     MAX_NUM_IMAGES = 9
