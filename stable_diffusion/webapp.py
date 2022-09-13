@@ -184,7 +184,7 @@ class ImageToImageBuilder():
             seed = gr.Number(0, label="seed : 0 = no seed")
             guidance_scale = gr.Number(7.5, label="guidance_scale")
         num_inference_steps = gr.Slider(minimum=5, maximum=200, value=50, step=5, label="num_inference_steps")
-        prompt_strength = gr.Slider(minimum=0., maximum=1.0, value=1.0, step=0.05, label="prompt_strength")
+        strength = gr.Slider(minimum=0., maximum=1.0, value=1.0, step=0.05, label="prompt strength")
         num_images = gr.Slider(minimum=1, maximum=self.max_num_images, value=default.NUM_IMAGES, step=1, label="Number of images")
 
         inputs = [
@@ -193,7 +193,7 @@ class ImageToImageBuilder():
             seed,
             guidance_scale,
             num_inference_steps,
-            prompt_strength,
+            strength,
             ]
 
         greet_btn = gr.Button("Generate !")
