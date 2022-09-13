@@ -271,14 +271,6 @@ class StableDiffusionImg2ImgPipelineOld(DiffusionPipeline):
 
 
 class UncensoredSafetyChecker(StableDiffusionSafetyChecker):
-    # def __init__(self, original_safety_checker):
-    #     self.original_safety_checker = original_safety_checker
-    
-    # def __call__(self,  clip_input, images):
-    #     original_images = images.copy()
-    #     images, has_nsfw_concepts = self.original_safety_checker(clip_input=clip_input, images=images)
-    #     return original_images, has_nsfw_concepts
-
     @torch.no_grad()
     def forward(self, clip_input, images):
         original_images = images.copy()

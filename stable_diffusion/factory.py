@@ -133,8 +133,6 @@ class Factory:
                 model_checkpoint,
                 subfolder="safety_checker",
                 use_auth_token=auth_token)
-        # if not censored:
-        #     safety_checker = UncensoredSafetyChecker(safety_checker)
         return safety_checker
 
     def _make_feature_extractor(self, model_checkpoint, half_precision, auth_token):
