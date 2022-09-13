@@ -1,7 +1,7 @@
 import logging
 import click
 
-from . import settings
+from . import settings  # Also load/set environment variables
 from . import default
 
 import gradio as gr
