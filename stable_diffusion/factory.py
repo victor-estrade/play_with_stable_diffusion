@@ -52,16 +52,21 @@ class Factory:
         self.safety_checker = self._make_safety_checker(model_chekpoint, half_precision, auth_token)
         self.feature_extractor = self._make_feature_extractor(model_chekpoint, half_precision, auth_token)
 
+    # ================
+    # Inner factory to load the models
+    # ================
     def _make_vae(self, model_chekpoint, half_precision, auth_token):
         if half_precision:
             vae = AutoencoderKL.from_pretrained(
                 model_chekpoint,
+                subfolder="vae",
                 revision="fp16",
                 torch_dtype=torch.float16,
                 use_auth_token=auth_token)
         else:
             vae = AutoencoderKL.from_pretrained(
                 model_chekpoint,
+                subfolder="vae",
                 use_auth_token=auth_token)
         return vae
 
@@ -69,6 +74,7 @@ class Factory:
         if half_precision:
             text_encoder = CLIPTextModel.from_pretrained(
                 model_chekpoint,
+                subfolder="text_encoder",
                 revision="fp16",
                 torch_dtype=torch.float16,
                 use_auth_token=auth_token)
@@ -78,11 +84,11 @@ class Factory:
                 use_auth_token=auth_token)
         return text_encoder
 
-
     def _make_tokenizer(self, model_chekpoint, half_precision, auth_token):
         if half_precision:
             tokenizer = CLIPTokenizer.from_pretrained(
                 model_chekpoint,
+                subfolder="tokenizer",
                 revision="fp16",
                 torch_dtype=torch.float16,
                 use_auth_token=auth_token)
@@ -96,6 +102,7 @@ class Factory:
         if half_precision:
             unet = UNet2DConditionModel.from_pretrained(
                 model_chekpoint,
+                subfolder="unet",
                 revision="fp16",
                 torch_dtype=torch.float16,
                 use_auth_token=auth_token)
@@ -105,17 +112,18 @@ class Factory:
                 use_auth_token=auth_token)
         return unet
 
-
     def _make_scheduler(self, model_chekpoint, half_precision, auth_token):
         if half_precision:
             scheduler = DDIMScheduler.from_pretrained(
                 model_chekpoint,
+                subfolder="scheduler",
                 revision="fp16",
                 torch_dtype=torch.float16,
                 use_auth_token=auth_token)
         else:
             scheduler = DDIMScheduler.from_pretrained(
                 model_chekpoint,
+                subfolder="scheduler",
                 use_auth_token=auth_token)
         return scheduler
 
@@ -123,12 +131,14 @@ class Factory:
         if half_precision:
             safety_checker = StableDiffusionSafetyChecker.from_pretrained(
                 model_chekpoint,
+                subfolder="safety_checker",
                 revision="fp16",
                 torch_dtype=torch.float16,
                 use_auth_token=auth_token)
         else:
             safety_checker = StableDiffusionSafetyChecker.from_pretrained(
                 model_chekpoint,
+                subfolder="safety_checker",
                 use_auth_token=auth_token)
         return safety_checker
 
@@ -136,15 +146,20 @@ class Factory:
         if half_precision:
             feature_extractor = CLIPFeatureExtractor.from_pretrained(
                 model_chekpoint,
+                subfolder="feature_extractor",
                 revision="fp16",
                 torch_dtype=torch.float16,
                 use_auth_token=auth_token)
         else:
             feature_extractor = CLIPFeatureExtractor.from_pretrained(
                 model_chekpoint,
+                subfolder="feature_extractor",
                 use_auth_token=auth_token)
         return feature_extractor
     
+    # ================
+    # Factory Making pipelines
+    # ================
 
     def make_simple(self):
         pipe = StableDiffusionPipeline(

@@ -20,7 +20,7 @@ from transformers import CLIPFeatureExtractor, CLIPTextModel, CLIPTokenizer
 
 
 
-class StableDiffusionImg2ImgPipeline(DiffusionPipeline):
+class StableDiffusionImg2ImgPipelineOld(DiffusionPipeline):
     """
     From https://github.com/huggingface/diffusers/pull/241
     """
