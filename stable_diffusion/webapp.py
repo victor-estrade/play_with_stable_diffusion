@@ -33,7 +33,6 @@ class TextToImageBuilder():
         factory : Factory,
         max_num_images:int=9,
         images_per_row:int=3,
-        device="cuda",
         ):
         """ Alternative constructor using a Factory
         """
@@ -66,7 +65,7 @@ class TextToImageBuilder():
         )
         print(nsfw_content_detected)
 
-        images_out = [auto_glue_image_grid(images)] + images + [None] * (self.max_num_images - len(images))
+        images_out = images + [None] * (self.max_num_images - len(images))
 
         return images_out
 
@@ -92,9 +91,7 @@ class TextToImageBuilder():
 
         greet_btn = gr.Button("Generate !")
 
-        out_glued_image = gr.Image(label=f"Generated images")
-
-        with gr.Accordion("Generated individual images"):
+        with gr.Accordion("Generated images"):
             i = 0
             output_images = []
             while i < self.max_num_images:
@@ -104,7 +101,7 @@ class TextToImageBuilder():
                         out_img = gr.Image(label=f"Generated {i+1}")
                         output_images.append(out_img)
                         i += 1
-        outputs = [out_glued_image] + output_images
+        outputs = output_images
         greet_btn.click(fn=self, inputs=inputs, outputs=outputs)
 
 
@@ -128,7 +125,6 @@ class ImageToImageBuilder():
         factory : Factory,
         max_num_images:int=9,
         images_per_row:int=3,
-        device="cuda",
         ):
         """ Alternative constructor using a Factory
         """
@@ -161,7 +157,7 @@ class ImageToImageBuilder():
         )
         print(nsfw_content_detected)
 
-        images_out = [auto_glue_image_grid(images)] + images + [None] * (self.max_num_images - len(images))
+        images_out = images + [None] * (self.max_num_images - len(images))
 
         return images_out
 
@@ -186,8 +182,6 @@ class ImageToImageBuilder():
 
         greet_btn = gr.Button("Generate !")
 
-        out_glued_image = gr.Image(label=f"Generated images")
-
         with gr.Accordion("Generated individual images"):
             i = 0
             output_images = []
@@ -198,7 +192,7 @@ class ImageToImageBuilder():
                         out_img = gr.Image(label=f"Generated {i+1}")
                         output_images.append(out_img)
                         i += 1
-        outputs = [out_glued_image] + output_images
+        outputs = output_images
         greet_btn.click(fn=self, inputs=inputs, outputs=outputs)
 
 
