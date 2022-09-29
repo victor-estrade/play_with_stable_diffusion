@@ -8,30 +8,80 @@ https://blog.paperspace.com/generating-images-with-stable-diffusion/
 
 
 
-# Requirements 
-a .env file with your hugging face token
+# Install
+
+0. Go to your working directory:
+
+```bash
+cd path/to/this_project
+```
+
+1. Clone the repo
+```bash
+git clone https://github.com/victor-estrade/play_with_stable_diffusion.git
+```
+
+2. Go inside the repo
+
+```bash
+cd play_with_stable_diffusion
+```
+
+3. Inititalize pyenv
+```bash
+make init
+```
+4. activate your new pyenv
+```bash
+pyenv shell stable_diffusion
+```
+
+5. Install
+
+```bash
+make install
+```
+
+
+
+# Requirements and custom settings
+
+
+## Hugging Face token
+
+You will need to have a .env file with your hugging face token in your workspace.
 
 .env
 ```
 HUGGING_FACE_TOKEN=YOUR_HUGGINGFACE_TOKEN
 ```
 
+## CUDA Setting
 
-# Current issues
+1. see which GPU on your machine is available using nvtop
+```bash
+nvtop
+```
 
-## Not enough RAM
-It requires large amount of RAM !
+2. change the cuda visible devices to use the available GPU in your .env file
 
-The half precision version works only a CUDA devices...
-Tryied using BFloat16 instead of Float16 but it breaks on linear layers.
+example in your .env file
+```
+CUDA_VISIBLE_DEVICES=0
+```
 
-## ONNX version 
+## Change Gradio port
 
-Convert to onnx because it does not work well using pytorch on CPU ?
-But it will still require large amont of RAM...
-https://huggingface.co/blog/convert-transformers-to-onnx
+If you want to change the port gradio is using you can specify it in your .env file.
 
+example in your .env file
+```
+CUDA_VISIBLE_DEVICES=7860
+```
 
-## Image to image 
-
-https://github.com/replicate/cog-stable-diffusion/blob/main/image_to_image.py
+## Complete example of .env file
+```
+HUGGING_FACE_TOKEN=YOUR_HUGGINGFACE_TOKEN
+CUDA_VISIBLE_DEVICES=0
+GRADIO_SERVER_PORT=7860
+```
