@@ -78,6 +78,8 @@ class TextToImageBuilder():
         num_inference_steps = gr.Slider(minimum=5, maximum=200, value=50, step=5, label="num_inference_steps")
         num_images = gr.Slider(minimum=1, maximum=self.max_num_images, value=default.NUM_IMAGES, step=1, label="Number of images")
 
+        generate_btn = gr.Button("Generate !")
+
         inputs = [
             prompt, num_images,
             width, height,
@@ -89,7 +91,6 @@ class TextToImageBuilder():
         gallery = gr.Gallery(label="Generated images", show_label=False, elem_id="gallery").style(grid=[2], height="auto")
         outputs = gallery
 
-        generate_btn = gr.Button("Generate !")
         generate_btn.click(fn=self, inputs=inputs, outputs=outputs)
 
 
@@ -155,6 +156,8 @@ class ImageToImageBuilder():
         strength = gr.Slider(minimum=0., maximum=1.0, value=0.8, step=0.05, label="prompt strength")
         num_images = gr.Slider(minimum=1, maximum=self.max_num_images, value=default.NUM_IMAGES, step=1, label="Number of images")
 
+        generate_btn = gr.Button("Generate !")
+
         inputs = [
             prompt,
             init_image,
@@ -168,7 +171,6 @@ class ImageToImageBuilder():
         gallery = gr.Gallery(label="Generated images", show_label=False, elem_id="gallery").style(grid=[2], height="auto")
         outputs = gallery
 
-        generate_btn = gr.Button("Generate !")
         generate_btn.click(fn=self, inputs=inputs, outputs=outputs)
 
 
@@ -237,6 +239,8 @@ class ImageInPaintingBuilder():
         strength = gr.Slider(minimum=0., maximum=1.0, value=0.8, step=0.05, label="prompt strength")
         num_images = gr.Slider(minimum=1, maximum=self.max_num_images, value=default.NUM_IMAGES, step=1, label="Number of images")
 
+        generate_btn = gr.Button("Generate !")
+
         inputs = [
             prompt,
             init_image,
@@ -251,7 +255,6 @@ class ImageInPaintingBuilder():
         gallery = gr.Gallery(label="Generated images", show_label=False, elem_id="gallery").style(grid=[2], height="auto")
         outputs = gallery
 
-        generate_btn = gr.Button("Generate !")
         generate_btn.click(fn=self, inputs=inputs, outputs=outputs)
 
 
@@ -320,6 +323,8 @@ class ImageInPaintingInplaceBuilder():
         strength = gr.Slider(minimum=0., maximum=1.0, value=0.8, step=0.05, label="prompt strength")
         num_images = gr.Slider(minimum=1, maximum=self.max_num_images, value=default.NUM_IMAGES, step=1, label="Number of images")
 
+        generate_btn = gr.Button("Generate !")
+
         inputs = [
             prompt,
             input_image,
@@ -333,7 +338,6 @@ class ImageInPaintingInplaceBuilder():
         gallery = gr.Gallery(label="Generated images", show_label=False, elem_id="gallery").style(grid=[2], height="auto")
         outputs = gallery
 
-        generate_btn = gr.Button("Generate !")
         generate_btn.click(fn=self, inputs=inputs, outputs=outputs)
 
 
