@@ -202,7 +202,7 @@ class ImageToImageBuilder():
 @click.option('--share', is_flag=True, show_default=True, default=False,
     help="Share the app. Create a proxy in gradio's website to access the app.")
 @click.option('--faster', is_flag=True, show_default=True, default=False,
-    help="Deactivate 'enable_attention_slicing' which helps save memory at the cost of small execution time.")
+    help="Deactivate 'enable_attention_slicing' which helps save memory at the cost of adding small execution time.")
 @click.option('--nsfw', is_flag=True, show_default=True, default=False,
     help="Remove image censoring. This is Not Safe For Work !")
 def main(share, faster, nsfw):
