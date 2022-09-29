@@ -8,7 +8,7 @@ import gradio as gr
 
 import numpy as np
 
-from .generators import TextToImageGenerator, ImageToImageGenerator
+from .generators import TextToImageGenerator, ImageToImageGenerator, ImageInPaintingGenerator
 from .factory import Factory
 from .images import auto_glue_image_grid
 
@@ -106,8 +106,6 @@ class TextToImageBuilder():
 
 
 
-
-
 class ImageToImageBuilder():
     def __init__(self,
         text_to_image_generator : ImageToImageGenerator,
@@ -173,7 +171,104 @@ class ImageToImageBuilder():
         num_images = gr.Slider(minimum=1, maximum=self.max_num_images, value=default.NUM_IMAGES, step=1, label="Number of images")
 
         inputs = [
-            prompt, init_image, num_images,
+            prompt,
+            init_image,
+            num_images,
+            seed,
+            guidance_scale,
+            num_inference_steps,
+            strength,
+            ]
+
+        generate_btn = gr.Button("Generate !")
+
+        with gr.Accordion("Generated individual images"):
+            i = 0
+            output_images = []
+            while i < self.max_num_images:
+                with gr.Row():
+                    remaining_out_images_to_init = self.max_num_images - i
+                    for j in range(min(self.images_per_row, remaining_out_images_to_init)):
+                        out_img = gr.Image(label=f"Generated {i+1}")
+                        output_images.append(out_img)
+                        i += 1
+        outputs = output_images
+        generate_btn.click(fn=self, inputs=inputs, outputs=outputs)
+
+
+
+class ImageInPaintingBuilder():
+    def __init__(self,
+        text_to_image_generator : ImageInPaintingGenerator,
+        max_num_images:int=9,
+        images_per_row:int=3,
+        ):
+        """ App builder for Image inpainting pipeline
+        """
+        self.text_to_image_generator = text_to_image_generator
+        self.max_num_images = max_num_images
+        self.images_per_row = images_per_row
+    
+    @classmethod
+    def from_factory(cls,
+        factory : Factory,
+        max_num_images:int=9,
+        images_per_row:int=3,
+        ):
+        """ Alternative constructor using a Factory
+        """
+        generator = ImageInPaintingGenerator(factory.make_inpaint_pipeline())
+        new_builder = cls(generator, max_num_images=max_num_images, images_per_row=images_per_row)
+        return new_builder
+
+
+    def __call__(
+        self,
+        prompt,
+        init_image,
+        mask_image,
+        num_image,
+        seed,
+        guidance_scale,
+        num_inference_steps,
+        strength,
+        ):
+        """ Wrapper around the generator.
+        It is used as the callable function in gradio's elements to generate the image.
+        """
+        images, nsfw_content_detected = self.text_to_image_generator(
+            prompt=prompt,
+            init_image=init_image,
+            mask_image=mask_image,
+            num_images=num_image,
+            num_inference_steps=num_inference_steps,
+            strength=strength,
+            guidance_scale=guidance_scale,
+            seed=seed,
+        )
+        print(nsfw_content_detected)
+
+        images_out = images + [None] * (self.max_num_images - len(images))
+
+        return images_out
+
+
+    def build(self):
+        prompt = gr.Textbox(label="prompt")
+        init_image = gr.Image(label="Initial image", type="pil")
+        mask_image = gr.Image(label="Mask image", type="pil")
+        with gr.Row():
+            seed = gr.Number(0, label="seed : 0 = no seed", precision=0)
+            guidance_scale = gr.Number(7.5, label="guidance_scale")
+        num_inference_steps = gr.Slider(minimum=5, maximum=200, value=50, step=5, label="num_inference_steps")
+        strength = gr.Slider(minimum=0., maximum=1.0, value=0.8, step=0.05, label="prompt strength")
+        num_images = gr.Slider(minimum=1, maximum=self.max_num_images, value=default.NUM_IMAGES, step=1, label="Number of images")
+
+        inputs = [
+            prompt,
+            init_image,
+            mask_image,
+            num_images,
             seed,
             guidance_scale,
             num_inference_steps,
@@ -225,6 +320,11 @@ def main(share, faster, nsfw):
         max_num_images=MAX_NUM_IMAGES,
         images_per_row=IMAGES_PER_ROW,
         )
+    IMAGE_INPAINTING_APP_BUILDER = ImageInPaintingBuilder.from_factory(
+        FACTORY,
+        max_num_images=MAX_NUM_IMAGES,
+        images_per_row=IMAGES_PER_ROW,
+        )
     logger.info("Models are ready")
 
 
@@ -233,6 +333,8 @@ def main(share, faster, nsfw):
             TEXT_TO_IMAGE_APP_BUILDER.build()
         with gr.Tab("Image to image pipeline") :
             IMAGE_TO_IMAGE_APP_BUILDER.build()
+        with gr.Tab("Image inpainting pipeline") :
+            IMAGE_INPAINTING_APP_BUILDER.build()
     demo.launch(share=share)
 
 
