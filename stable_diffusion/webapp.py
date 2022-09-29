@@ -274,7 +274,7 @@ class SketchToImageBuilder:
 
     def build(self):
         prompt = gr.Textbox(label="prompt")
-        init_image = gr.Paint(label="Initial image", type="pil")
+        init_image = gr.Paint(label="Initial image", type="pil", shape=(512,512))
         with gr.Row():
             seed = gr.Number(0, label="seed : 0 = no seed", precision=0)
             guidance_scale = gr.Number(7.5, label="guidance_scale")
