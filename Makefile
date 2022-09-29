@@ -51,16 +51,16 @@ coverage-unit: ## launch unit test coverage
 lint: autopep8 flake8 black isort ## Lint
 
 autopep8:
-	@autopep8 --in-place -r src
+	@autopep8 --in-place -r $(PROJECT_NAME)
 
 flake8:
-	@flake8 src
+	@flake8 $(PROJECT_NAME)
 
 black:
-	@black src --check
+	@black $(PROJECT_NAME) --check
 
 isort:
-	@isort src --check
+	@isort $(PROJECT_NAME) --check
 
 ###############################
 # Clean

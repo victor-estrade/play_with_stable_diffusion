@@ -8,16 +8,15 @@ import torch
 from . import default
 
 
-
 def preprocess_init_image(image: Image):
     w, h = image.size
-    w, h = map(lambda x: x - x % 32, (w, h))  # resize to integer multiple of 32
+    # resize to integer multiple of 32
+    w, h = map(lambda x: x - x % 32, (w, h))
     image = image.resize((w, h), resample=Image.Resampling.LANCZOS)
     image = np.array(image).astype(np.float32) / 255.0
     image = image[None].transpose(0, 3, 1, 2)
     image = torch.from_numpy(image)
     return 2.0 * image - 1.0
-
 
 
 def preprocess_mask(mask: Image, width: int, height: int):
@@ -30,19 +29,16 @@ def preprocess_mask(mask: Image, width: int, height: int):
     return mask
 
 
-
-
 def glue_image_grid(images, n_rows=default.N_ROWS, n_cols=default.N_COLS):
     assert len(images) == n_rows * n_cols
 
     w, h = images[0].size
-    grid = Image.new('RGB', size=(n_cols*w, n_rows*h))
+    grid = Image.new("RGB", size=(n_cols * w, n_rows * h))
     grid_w, grid_h = grid.size
-    
+
     for i, img in enumerate(images):
         grid.paste(img, box=(i % n_cols * w, i // n_cols * h))
     return grid
-
 
 
 def auto_glue_image_grid(images):
@@ -71,4 +67,3 @@ def save_images(images, out_dir=default.OUTPUT_DIR):
         image.save(out_dir / fname)
     image_grid = auto_glue_image_grid(images)
     image_grid.save(out_dir / "image_grid.png")
-

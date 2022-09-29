@@ -5,24 +5,25 @@ from PIL import Image
 # removed in Pillow 10.
 if hasattr(Image, "Resampling"):
     _pil_interpolation_to_str = {
-        Image.Resampling.NEAREST: 'nearest',
-        Image.Resampling.BILINEAR: 'bilinear',
-        Image.Resampling.BICUBIC: 'bicubic',
-        Image.Resampling.BOX: 'box',
-        Image.Resampling.HAMMING: 'hamming',
-        Image.Resampling.LANCZOS: 'lanczos',
+        Image.Resampling.NEAREST: "nearest",
+        Image.Resampling.BILINEAR: "bilinear",
+        Image.Resampling.BICUBIC: "bicubic",
+        Image.Resampling.BOX: "box",
+        Image.Resampling.HAMMING: "hamming",
+        Image.Resampling.LANCZOS: "lanczos",
     }
 else:
     _pil_interpolation_to_str = {
-        Image.NEAREST: 'nearest',
-        Image.BILINEAR: 'bilinear',
-        Image.BICUBIC: 'bicubic',
-        Image.BOX: 'box',
-        Image.HAMMING: 'hamming',
-        Image.LANCZOS: 'lanczos',
+        Image.NEAREST: "nearest",
+        Image.BILINEAR: "bilinear",
+        Image.BICUBIC: "bicubic",
+        Image.BOX: "box",
+        Image.HAMMING: "hamming",
+        Image.LANCZOS: "lanczos",
     }
 
 _str_to_pil_interpolation = {b: a for a, b in _pil_interpolation_to_str.items()}
+
 
 class PIL_IMAGE_RESAMPLING:
     NEAREST = _str_to_pil_interpolation["nearest"]
@@ -34,19 +35,24 @@ class PIL_IMAGE_RESAMPLING:
 
 
 def fetch_bytes(url_or_path):
-    if str(url_or_path).startswith('http://') or str(url_or_path).startswith('https://'):
-        from urllib.request import urlopen 
-        return urlopen(url_or_path) 
-    return open(url_or_path, 'r')
+    if str(url_or_path).startswith("http://") or str(url_or_path).startswith(
+        "https://"
+    ):
+        from urllib.request import urlopen
+
+        return urlopen(url_or_path)
+    return open(url_or_path, "r")
 
 
 def fetch_huggingface_key():
-    """ Fetch some huggingface token.
+    """Fetch some huggingface token.
     Extracted from some colab notebook
     """
     try:
-        with fetch_bytes('https://raw.githubusercontent.com/WASasquatch/easydiffusion/main/key.txt') as f:
-            key = f.read().decode('utf-8').split(':')
+        with fetch_bytes(
+            "https://raw.githubusercontent.com/WASasquatch/easydiffusion/main/key.txt"
+        ) as f:
+            key = f.read().decode("utf-8").split(":")
     except OSError as e:
         print(e)
     huggingface_username = key[0].strip()

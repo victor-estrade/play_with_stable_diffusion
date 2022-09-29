@@ -18,8 +18,6 @@ from tqdm.auto import tqdm
 from transformers import CLIPFeatureExtractor, CLIPTextModel, CLIPTokenizer
 
 
-
-
 class StableDiffusionImg2ImgPipelineOld(DiffusionPipeline):
     """
     From https://github.com/huggingface/diffusers/pull/241
@@ -144,7 +142,7 @@ class StableDiffusionImg2ImgPipelineOld(DiffusionPipeline):
 
             if isinstance(self.scheduler, LMSDiscreteScheduler):
                 sigma = self.scheduler.sigmas[i]
-                latent_model_input = latent_model_input / ((sigma ** 2 + 1) ** 0.5)
+                latent_model_input = latent_model_input / ((sigma**2 + 1) ** 0.5)
 
             # predict the noise residual
             noise_pred = self.unet(
@@ -160,13 +158,13 @@ class StableDiffusionImg2ImgPipelineOld(DiffusionPipeline):
 
             # compute the previous noisy sample x_t -> x_t-1
             if isinstance(self.scheduler, LMSDiscreteScheduler):
-                latents = self.scheduler.step(noise_pred, i, latents, **extra_step_kwargs)[
-                    "prev_sample"
-                ]
+                latents = self.scheduler.step(
+                    noise_pred, i, latents, **extra_step_kwargs
+                )["prev_sample"]
             else:
-                latents = self.scheduler.step(noise_pred, t, latents, **extra_step_kwargs)[
-                    "prev_sample"
-                ]
+                latents = self.scheduler.step(
+                    noise_pred, t, latents, **extra_step_kwargs
+                )["prev_sample"]
 
             # replace the unmasked part with original latents, with added noise
             if mask is not None:
@@ -174,7 +172,9 @@ class StableDiffusionImg2ImgPipelineOld(DiffusionPipeline):
                 timesteps = torch.tensor(
                     [timesteps] * batch_size, dtype=torch.long, device=self.device
                 )
-                noisy_init_latents = self.scheduler.add_noise(init_latents_orig, mask_noise, timesteps)
+                noisy_init_latents = self.scheduler.add_noise(
+                    init_latents_orig, mask_noise, timesteps
+                )
                 latents = noisy_init_latents * mask + latents * (1 - mask)
 
         # scale and decode the image latents with vae

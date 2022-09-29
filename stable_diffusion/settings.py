@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 import logging
 import os
 from pathlib import Path
@@ -34,12 +35,10 @@ LOG_DICT_CONFIG = dict(
 )
 
 
-
 # ===============================================================
 # Setup variables and logging and stuffs
 # ===============================================================
 
-from dotenv import load_dotenv
 load_dotenv()  # take environment variables from .env.
 
 if "HUGGING_FACE_TOKEN" in os.environ:

@@ -3,26 +3,30 @@ import torch
 
 from PIL import Image
 
-from diffusers.pipelines.stable_diffusion import StableDiffusionPipeline, StableDiffusionImg2ImgPipeline, StableDiffusionInpaintPipeline
+from diffusers.pipelines.stable_diffusion import (
+    StableDiffusionPipeline,
+    StableDiffusionImg2ImgPipeline,
+    StableDiffusionInpaintPipeline,
+)
 
 logger = logging.getLogger(__name__)
 
 
-class TextToImageGenerator():
-    def __init__(self, pipe : StableDiffusionPipeline) -> None:
+class TextToImageGenerator:
+    def __init__(self, pipe: StableDiffusionPipeline) -> None:
         self.pipe = pipe
 
     def __call__(
         self,
-        prompt:str,
-        width:int=512,
-        height:int=512,
+        prompt: str,
+        width: int = 512,
+        height: int = 512,
         num_images=4,
         num_inference_steps=50,
         guidance_scale=7.5,
         seed=None,
-        ):
-        """ Generate images from given text prompt.
+    ):
+        """Generate images from given text prompt.
 
         :param prompt: the sentence prompt to generate the images
         :param width: the width of the images
@@ -36,7 +40,9 @@ class TextToImageGenerator():
             images : the list of PIL Images
             nsfw_content_detected : the list of flag if the content is Not Safe For Work
         """
-        generator = torch.Generator(self.pipe.device).manual_seed(seed) if seed else None
+        generator = (
+            torch.Generator(self.pipe.device).manual_seed(seed) if seed else None
+        )
 
         with torch.autocast("cuda"):
             results = [
@@ -46,33 +52,35 @@ class TextToImageGenerator():
                     height=height,
                     num_inference_steps=num_inference_steps,
                     guidance_scale=guidance_scale,
-                    generator=generator
-                    )
-                for i in range(num_images)]
+                    generator=generator,
+                )
+                for i in range(num_images)
+            ]
 
         images = [image for result in results for image in result.images]
-        nsfw_content_detected = [is_nsfw for result in results for is_nsfw in result.nsfw_content_detected]
+        nsfw_content_detected = [
+            is_nsfw for result in results for is_nsfw in result.nsfw_content_detected
+        ]
         return images, nsfw_content_detected
 
 
-
-class ImageToImageGenerator():
-    def __init__(self, pipe : StableDiffusionImg2ImgPipeline) -> None:
+class ImageToImageGenerator:
+    def __init__(self, pipe: StableDiffusionImg2ImgPipeline) -> None:
         self.pipe = pipe
 
     def __call__(
         self,
-        prompt:str,
-        init_image : Image,
+        prompt: str,
+        init_image: Image,
         num_images=4,
         num_inference_steps=50,
-        strength:float=1.0,
+        strength: float = 1.0,
         guidance_scale=7.5,
         seed=None,
-        ):
-        """ Generate images from given text prompt.
+    ):
+        """Generate images from given text prompt.
 
-        :param prompt: 
+        :param prompt:
             the sentence prompt to generate the images
         :param init_image:
             the initial image
@@ -97,7 +105,9 @@ class ImageToImageGenerator():
             nsfw_content_detected :
                 the list of flag if the content is Not Safe For Work
         """
-        generator = torch.Generator(self.pipe.device).manual_seed(seed) if seed else None
+        generator = (
+            torch.Generator(self.pipe.device).manual_seed(seed) if seed else None
+        )
 
         with torch.autocast("cuda"):
             results = [
@@ -107,39 +117,42 @@ class ImageToImageGenerator():
                     num_inference_steps=num_inference_steps,
                     strength=strength,
                     guidance_scale=guidance_scale,
-                    generator=generator
-                    )
-                for i in range(num_images)]
+                    generator=generator,
+                )
+                for i in range(num_images)
+            ]
 
         images = [image for result in results for image in result.images]
-        nsfw_content_detected = [is_nsfw for result in results for is_nsfw in result.nsfw_content_detected]
+        nsfw_content_detected = [
+            is_nsfw for result in results for is_nsfw in result.nsfw_content_detected
+        ]
         return images, nsfw_content_detected
 
 
-class ImageInPaintingGenerator():
-    def __init__(self, pipe : StableDiffusionImg2ImgPipeline) -> None:
+class ImageInPaintingGenerator:
+    def __init__(self, pipe: StableDiffusionInpaintPipeline) -> None:
         self.pipe = pipe
 
     def __call__(
         self,
-        prompt:str,
-        init_image : Image,
-        mask_image : Image,
+        prompt: str,
+        init_image: Image,
+        mask_image: Image,
         num_images=4,
         num_inference_steps=50,
-        strength:float=1.0,
+        strength: float = 1.0,
         guidance_scale=7.5,
         seed=None,
-        ):
-        """ Generate images from given text prompt.
+    ):
+        """Generate images from given text prompt.
 
-        :param prompt: 
+        :param prompt:
             the sentence prompt to generate the images
         :param init_image:
             the initial image
         :param mask_image:
             the mask image. White pixels in the mask will be replaced by noise and therefore repainted,
-            while black pixels will be preserved. The mask can be gray in which case 
+            while black pixels will be preserved. The mask can be gray in which case
             the inpainting will combine the latent reprsentation together.
         :param num_images:
             the number of images to degenerate from the prompt
@@ -162,7 +175,9 @@ class ImageInPaintingGenerator():
             nsfw_content_detected :
                 the list of flag if the content is Not Safe For Work
         """
-        generator = torch.Generator(self.pipe.device).manual_seed(seed) if seed else None
+        generator = (
+            torch.Generator(self.pipe.device).manual_seed(seed) if seed else None
+        )
 
         with torch.autocast("cuda"):
             results = [
@@ -173,10 +188,13 @@ class ImageInPaintingGenerator():
                     num_inference_steps=num_inference_steps,
                     strength=strength,
                     guidance_scale=guidance_scale,
-                    generator=generator
-                    )
-                for i in range(num_images)]
+                    generator=generator,
+                )
+                for i in range(num_images)
+            ]
 
         images = [image for result in results for image in result.images]
-        nsfw_content_detected = [is_nsfw for result in results for is_nsfw in result.nsfw_content_detected]
+        nsfw_content_detected = [
+            is_nsfw for result in results for is_nsfw in result.nsfw_content_detected
+        ]
         return images, nsfw_content_detected

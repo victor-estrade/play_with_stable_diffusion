@@ -1,4 +1,3 @@
-
 import os
 import click
 import logging
@@ -18,8 +17,6 @@ from .generators import generate_from_prompt
 logger = logging.getLogger(__name__)
 
 
-
-
 @click.Command()
 def main():
     """
@@ -29,12 +26,12 @@ def main():
     pipe = load_model(half_precision=True, device="cuda")
     PROMPT = "Super cute bunny eating a carrot"
     NUM_IMAGES = 1
-    images, nsfw_content_detected = generate_from_prompt(pipe, PROMPT, num_images=NUM_IMAGES)
+    images, nsfw_content_detected = generate_from_prompt(
+        pipe, PROMPT, num_images=NUM_IMAGES
+    )
     for i, nsfw in enumerate(nsfw_content_detected):
         if nsfw:
             logger.info(f"Not Safe For Work content detected in image {i}")
-
-
 
 
 if __name__ == "__main__":
