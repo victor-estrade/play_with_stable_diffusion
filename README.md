@@ -42,8 +42,6 @@ pyenv shell stable_diffusion
 make install
 ```
 
-
-
 # Requirements and custom settings
 
 
