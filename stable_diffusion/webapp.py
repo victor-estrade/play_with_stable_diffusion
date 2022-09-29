@@ -31,6 +31,11 @@ class TextToImageBuilder:
         self.text_to_image_generator = text_to_image_generator
         self.max_num_images = max_num_images
         self.images_per_row = images_per_row
+        self.gallery_grid = [
+            max(1, self.images_per_row - 2),
+            max(1, self.images_per_row - 1),
+            max(1, self.images_per_row),
+        ]
 
     @classmethod
     def from_factory(
@@ -108,7 +113,7 @@ class TextToImageBuilder:
 
         gallery = gr.Gallery(
             label="Generated images", show_label=False, elem_id="gallery"
-        ).style(grid=[2], height="auto")
+        ).style(grid=self.gallery_grid, height="auto")
         outputs = gallery
 
         generate_btn.click(fn=self, inputs=inputs, outputs=outputs)
@@ -199,7 +204,7 @@ class ImageToImageBuilder:
 
         gallery = gr.Gallery(
             label="Generated images", show_label=False, elem_id="gallery"
-        ).style(grid=[2], height="auto")
+        ).style(grid=self.gallery_grid, height="auto")
         outputs = gallery
 
         generate_btn.click(fn=self, inputs=inputs, outputs=outputs)
@@ -294,7 +299,7 @@ class ImageInPaintingBuilder:
 
         gallery = gr.Gallery(
             label="Generated images", show_label=False, elem_id="gallery"
-        ).style(grid=[2], height="auto")
+        ).style(grid=self.gallery_grid, height="auto")
         outputs = gallery
 
         generate_btn.click(fn=self, inputs=inputs, outputs=outputs)
@@ -389,7 +394,7 @@ class ImageInPaintingInplaceBuilder:
 
         gallery = gr.Gallery(
             label="Generated images", show_label=False, elem_id="gallery"
-        ).style(grid=[2], height="auto")
+        ).style(grid=self.gallery_grid, height="auto")
         outputs = gallery
 
         generate_btn.click(fn=self, inputs=inputs, outputs=outputs)
