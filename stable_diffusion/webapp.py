@@ -89,7 +89,7 @@ class TextToImageBuilder():
             num_inference_steps,
             ]
 
-        greet_btn = gr.Button("Generate !")
+        generate_btn = gr.Button("Generate !")
 
         with gr.Accordion("Generated images"):
             i = 0
@@ -102,7 +102,7 @@ class TextToImageBuilder():
                         output_images.append(out_img)
                         i += 1
         outputs = output_images
-        greet_btn.click(fn=self, inputs=inputs, outputs=outputs)
+        generate_btn.click(fn=self, inputs=inputs, outputs=outputs)
 
 
 
@@ -180,7 +180,7 @@ class ImageToImageBuilder():
             strength,
             ]
 
-        greet_btn = gr.Button("Generate !")
+        generate_btn = gr.Button("Generate !")
 
         with gr.Accordion("Generated individual images"):
             i = 0
@@ -193,7 +193,7 @@ class ImageToImageBuilder():
                         output_images.append(out_img)
                         i += 1
         outputs = output_images
-        greet_btn.click(fn=self, inputs=inputs, outputs=outputs)
+        generate_btn.click(fn=self, inputs=inputs, outputs=outputs)
 
 
 
