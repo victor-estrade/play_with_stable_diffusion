@@ -63,11 +63,8 @@ class TextToImageBuilder():
             guidance_scale=guidance_scale,
             seed=seed,
         )
-        print(nsfw_content_detected)
-
-        images_out = images #+ [None] * (self.max_num_images - len(images))
-
-        return images_out
+        logger.info(f"NSFW list = {nsfw_content_detected}")
+        return images
 
 
     def build(self):
@@ -89,21 +86,10 @@ class TextToImageBuilder():
             num_inference_steps,
             ]
 
-        generate_btn = gr.Button("Generate !")
-
         gallery = gr.Gallery(label="Generated images", show_label=False, elem_id="gallery").style(grid=[2], height="auto")
-
-        # with gr.Accordion("Generated images"):
-        #     i = 0
-        #     output_images = []
-        #     while i < self.max_num_images:
-        #         with gr.Row():
-        #             remaining_out_images_to_init = self.max_num_images - i
-        #             for j in range(min(self.images_per_row, remaining_out_images_to_init)):
-        #                 out_img = gr.Image(label=f"Generated {i+1}")
-        #                 output_images.append(out_img)
-        #                 i += 1
         outputs = gallery
+
+        generate_btn = gr.Button("Generate !")
         generate_btn.click(fn=self, inputs=inputs, outputs=outputs)
 
 
@@ -155,11 +141,8 @@ class ImageToImageBuilder():
             guidance_scale=guidance_scale,
             seed=seed,
         )
-        print(nsfw_content_detected)
-
-        images_out = images + [None] * (self.max_num_images - len(images))
-
-        return images_out
+        logger.info(f"NSFW list = {nsfw_content_detected}")
+        return images
 
 
     def build(self):
@@ -182,19 +165,10 @@ class ImageToImageBuilder():
             strength,
             ]
 
-        generate_btn = gr.Button("Generate !")
+        gallery = gr.Gallery(label="Generated images", show_label=False, elem_id="gallery").style(grid=[2], height="auto")
+        outputs = gallery
 
-        with gr.Accordion("Generated individual images"):
-            i = 0
-            output_images = []
-            while i < self.max_num_images:
-                with gr.Row():
-                    remaining_out_images_to_init = self.max_num_images - i
-                    for j in range(min(self.images_per_row, remaining_out_images_to_init)):
-                        out_img = gr.Image(label=f"Generated {i+1}")
-                        output_images.append(out_img)
-                        i += 1
-        outputs = output_images
+        generate_btn = gr.Button("Generate !")
         generate_btn.click(fn=self, inputs=inputs, outputs=outputs)
 
 
@@ -248,11 +222,8 @@ class ImageInPaintingBuilder():
             guidance_scale=guidance_scale,
             seed=seed,
         )
-        print(nsfw_content_detected)
-
-        images_out = images + [None] * (self.max_num_images - len(images))
-
-        return images_out
+        logger.info(f"NSFW list = {nsfw_content_detected}")
+        return images
 
 
     def build(self):
@@ -277,19 +248,10 @@ class ImageInPaintingBuilder():
             strength,
             ]
 
-        generate_btn = gr.Button("Generate !")
+        gallery = gr.Gallery(label="Generated images", show_label=False, elem_id="gallery").style(grid=[2], height="auto")
+        outputs = gallery
 
-        with gr.Accordion("Generated individual images"):
-            i = 0
-            output_images = []
-            while i < self.max_num_images:
-                with gr.Row():
-                    remaining_out_images_to_init = self.max_num_images - i
-                    for j in range(min(self.images_per_row, remaining_out_images_to_init)):
-                        out_img = gr.Image(label=f"Generated {i+1}")
-                        output_images.append(out_img)
-                        i += 1
-        outputs = output_images
+        generate_btn = gr.Button("Generate !")
         generate_btn.click(fn=self, inputs=inputs, outputs=outputs)
 
 
