@@ -130,6 +130,11 @@ class ImageToImageBuilder:
         self.text_to_image_generator = text_to_image_generator
         self.max_num_images = max_num_images
         self.images_per_row = images_per_row
+        self.gallery_grid = [
+            max(1, self.images_per_row - 2),
+            max(1, self.images_per_row - 1),
+            max(1, self.images_per_row),
+        ]
 
     @classmethod
     def from_factory(
@@ -221,6 +226,11 @@ class ImageInPaintingBuilder:
         self.text_to_image_generator = text_to_image_generator
         self.max_num_images = max_num_images
         self.images_per_row = images_per_row
+        self.gallery_grid = [
+            max(1, self.images_per_row - 2),
+            max(1, self.images_per_row - 1),
+            max(1, self.images_per_row),
+        ]
 
     @classmethod
     def from_factory(
@@ -316,6 +326,11 @@ class ImageInPaintingInplaceBuilder:
         self.text_to_image_generator = text_to_image_generator
         self.max_num_images = max_num_images
         self.images_per_row = images_per_row
+        self.gallery_grid = [
+            max(1, self.images_per_row - 2),
+            max(1, self.images_per_row - 1),
+            max(1, self.images_per_row),
+        ]
 
     @classmethod
     def from_factory(
