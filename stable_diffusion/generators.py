@@ -13,6 +13,8 @@ logger = logging.getLogger(__name__)
 
 
 class TextToImageGenerator:
+    """ Wrapper around StableDiffusionPipeline to adapt the input arguments.
+    """
     def __init__(self, pipe: StableDiffusionPipeline) -> None:
         self.pipe = pipe
 
@@ -65,6 +67,8 @@ class TextToImageGenerator:
 
 
 class ImageToImageGenerator:
+    """ Wrapper around StableDiffusionImg2ImgPipeline to adapt the input arguments.
+    """
     def __init__(self, pipe: StableDiffusionImg2ImgPipeline) -> None:
         self.pipe = pipe
 
@@ -130,6 +134,8 @@ class ImageToImageGenerator:
 
 
 class ImageInPaintingGenerator:
+    """ Wrapper around StableDiffusionInpaintPipeline to adapt the input arguments.
+    """
     def __init__(self, pipe: StableDiffusionInpaintPipeline) -> None:
         self.pipe = pipe
 
