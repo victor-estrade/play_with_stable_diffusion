@@ -16,4 +16,4 @@ diffusers>=0.3
 transformers
 
 # Web app
-gradio
+gradio >= 3.4

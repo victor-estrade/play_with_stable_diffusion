@@ -311,7 +311,8 @@ class ImageInPaintingInplaceBuilder():
 
     def build(self):
         prompt = gr.Textbox(label="prompt")
-        input_image = gr.Image(label="Input image", type="pil", source="upload", tool="sketch")
+        input_image = gr.ImageMask(label="Input image", type='pil')
+        # input_image = gr.Image(label="Input image", type="pil", source="upload", tool="sketch")
         with gr.Row():
             seed = gr.Number(0, label="seed : 0 = no seed", precision=0)
             guidance_scale = gr.Number(7.5, label="guidance_scale")
