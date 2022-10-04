@@ -185,7 +185,7 @@ class ImageToImageBuilder:
             minimum=5, maximum=200, value=50, step=5, label="num_inference_steps"
         )
         strength = gr.Slider(
-            minimum=0.0, maximum=1.0, value=0.8, step=0.05, label="prompt strength"
+            minimum=0.0, maximum=1.0, value=0.8, step=0.01, label="prompt strength"
         )
         num_images = gr.Slider(
             minimum=1,
@@ -282,7 +282,7 @@ class SketchToImageBuilder:
             minimum=5, maximum=200, value=50, step=5, label="num_inference_steps"
         )
         strength = gr.Slider(
-            minimum=0.0, maximum=1.0, value=0.8, step=0.05, label="prompt strength"
+            minimum=0.0, maximum=1.0, value=0.8, step=0.01, label="prompt strength"
         )
         num_images = gr.Slider(
             minimum=1,
@@ -381,7 +381,7 @@ class ImageInPaintingBuilder:
             minimum=5, maximum=200, value=50, step=5, label="num_inference_steps"
         )
         strength = gr.Slider(
-            minimum=0.0, maximum=1.0, value=0.8, step=0.05, label="prompt strength"
+            minimum=0.0, maximum=1.0, value=0.8, step=0.01, label="prompt strength"
         )
         num_images = gr.Slider(
             minimum=1,
@@ -482,7 +482,7 @@ class ImageInPaintingInplaceBuilder:
             minimum=5, maximum=200, value=50, step=5, label="num_inference_steps"
         )
         strength = gr.Slider(
-            minimum=0.0, maximum=1.0, value=0.8, step=0.05, label="prompt strength"
+            minimum=0.0, maximum=1.0, value=0.8, step=0.01, label="prompt strength"
         )
         num_images = gr.Slider(
             minimum=1,
