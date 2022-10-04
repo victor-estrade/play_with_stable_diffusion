@@ -16,6 +16,10 @@ CUDA_VISIBLE_DEVICES = "1"
 # default is ~/.cache/torch/
 TORCH_MODEL_ZOO_DIR = "/common_projects/models/torch_zoo/"
 
+# The location of models downloaded by huggingface hub
+# default is ~/.cache/huggingface/
+HF_HOME = "/common_projects/models/huggingface"
+
 
 # The dict used to configure logging
 LOG_DICT_CONFIG = dict(
@@ -52,8 +56,11 @@ if "COLAB_GPU" not in os.environ:  # Avoid using CUDA_VISIBLE_DEVICES on Colab n
     if "CUDA_VISIBLE_DEVICES" not in os.environ:
         os.environ["CUDA_VISIBLE_DEVICES"] = CUDA_VISIBLE_DEVICES
 
-torch_model_zoo_dir = Path(TORCH_MODEL_ZOO_DIR)
-if torch_model_zoo_dir.is_dir():
+if Path(TORCH_MODEL_ZOO_DIR).is_dir():
     os.environ["TORCH_HOME"] = TORCH_MODEL_ZOO_DIR
+
+# USE COMMON HUGGINGFACE MODEL HUB TO AVOID DUPLICATES AND SAVE DISK SPACE
+if Path(HF_HOME).is_dir() and "HF_HOME" not in os.environ:
+    os.environ["HF_HOME"] = HF_HOME
 
 dictConfig(LOG_DICT_CONFIG)
